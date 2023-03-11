@@ -6,8 +6,10 @@ import {
   useFonts,
 } from "@expo-google-fonts/inter";
 import { Fragment } from "react";
-import { StatusBar, Text, View } from "react-native";
+import { StatusBar } from "react-native";
 import { Loading } from "~/components/Loading";
+import "~/lib/dayjs";
+import { Home } from "~/screens/Home";
 
 const App: React.FC = () => {
   const [areFontsReady] = useFonts({
@@ -25,22 +27,7 @@ const App: React.FC = () => {
         backgroundColor="transparent"
       />
 
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: "#09090A",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        {areFontsReady ? (
-          <Text style={{ color: "#A1A1AA", fontFamily: "Inter_800ExtraBold" }}>
-            Open up App.tsx to start working on your app!
-          </Text>
-        ) : (
-          <Loading />
-        )}
-      </View>
+      {areFontsReady ? <Home /> : <Loading />}
     </Fragment>
   );
 };
