@@ -12,5 +12,5 @@ app.register(daysRoutes, { prefix: "/days" });
 app.register(habitsRoutes, { prefix: "/habits" });
 
 app
-  .listen({ port: 3333, host: "127.0.0.1" })
+  .listen({ port: 3333, host: "0.0.0.0" })
   .then(url => console.log(`Server running at ${url}`));

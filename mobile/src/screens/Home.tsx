@@ -1,30 +1,17 @@
-import { useNavigation } from "@react-navigation/native";
-import { ScrollView, Text, View } from "react-native";
-import { daySize, HabitDay } from "~/components/HabitDay";
+import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import { QueryErrorResetBoundary } from "react-query";
+import { daySize } from "~/components/HabitDay";
 import { Header } from "~/components/Header";
-import { generateDatesFromYearBeginning } from "~/utils/generate-dates-from-year-beginning";
+import { SummaryTable } from "~/components/SummaryTable";
+import { SummaryTableSkeleton } from "~/components/SummaryTableSkeleton";
 
 const weekDays = ["D", "S", "T", "Q", "Q", "S", "S"];
-const summaryDates = generateDatesFromYearBeginning();
-
-const minimumSummaryDatesSize = 12 * 7; // 12 weeks
-
-const amountOfDaysToFill = Array.from(
-  { length: minimumSummaryDatesSize - summaryDates.length },
-  (_, index) => index + 1,
-);
 
 interface HomeProps {}
 
 export const Home: React.FC<HomeProps> = () => {
-  const { navigate } = useNavigation();
-
-  function handleNavigateToHabit(date: string) {
-    return () => {
-      navigate("habit", { date });
-    };
-  }
-
   return (
     <View className="bg-background flex-1 px-8 pt-16">
       <Header />
@@ -42,22 +29,34 @@ export const Home: React.FC<HomeProps> = () => {
       </View>
 
       <ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
-        <View className="flex-row flex-wrap">
-          {summaryDates.map(date => (
-            <HabitDay
-              key={date.toISOString()}
-              onPress={handleNavigateToHabit(date.toISOString())}
-            />
-          ))}
+        <QueryErrorResetBoundary>
+          {({ reset }) => (
+            <ErrorBoundary
+              onReset={reset}
+              fallbackRender={({ resetErrorBoundary }) => (
+                <View className="flex items-center">
+                  <Text className="text-red-500 text-base font-medium">
+                    Ocorreu um erro inesperado 😰
+                  </Text>
 
-          {amountOfDaysToFill.map(number => (
-            <View
-              key={number}
-              style={{ width: daySize, height: daySize }}
-              className="bg-zinc-900 border-2 border-zinc-800 rounded-lg m-1 opacity-40"
-            />
-          ))}
-        </View>
+                  <TouchableOpacity
+                    activeOpacity={0.7}
+                    onPress={() => resetErrorBoundary()}
+                    className="border border-violet-500 rounded-lg px-6 py-4 flex items-center justify-center mt-4"
+                  >
+                    <Text className="text-white text-base font-semibold">
+                      Tentar novamente
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            >
+              <Suspense fallback={<SummaryTableSkeleton />}>
+                <SummaryTable />
+              </Suspense>
+            </ErrorBoundary>
+          )}
+        </QueryErrorResetBoundary>
       </ScrollView>
     </View>
   );

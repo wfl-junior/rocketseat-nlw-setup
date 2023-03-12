@@ -8,7 +8,6 @@ export async function daysRoutes(app: FastifyInstance) {
   app.get("/", async request => {
     const { date } = daysParamsValidationSchema.parse(request.query);
     const startOfDate = dayjs(date).startOf("day");
-    console.log(startOfDate.toISOString());
 
     const possibleHabits = await prisma.habit.findMany({
       where: {

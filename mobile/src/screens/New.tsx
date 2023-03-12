@@ -1,6 +1,9 @@
 import { Feather } from "@expo/vector-icons";
+import classNames from "classnames";
 import { useState } from "react";
 import {
+  ActivityIndicator,
+  Alert,
   ScrollView,
   Text,
   TextInput,
@@ -10,6 +13,7 @@ import {
 import colors from "tailwindcss/colors";
 import { BackButton } from "~/components/BackButton";
 import { Checkbox } from "~/components/Checkbox";
+import { api } from "~/lib/axios";
 
 const availableWeekDays = [
   "Domingo",
@@ -24,7 +28,41 @@ const availableWeekDays = [
 interface NewProps {}
 
 export const New: React.FC<NewProps> = () => {
+  const [title, setTitle] = useState("");
   const [weekDays, setWeekDays] = useState<number[]>([]);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  async function handleCreateNewHabit() {
+    const newTitle = title.trim();
+
+    if (!newTitle) {
+      return Alert.alert("Novo hábito", "O título é obrigatório.");
+    }
+
+    if (weekDays.length === 0) {
+      return Alert.alert(
+        "Novo hábito",
+        "É obrigatório preencher pelo menos um dia da semana.",
+      );
+    }
+
+    setIsSubmitting(true);
+
+    try {
+      await api.post("/habits", {
+        title: newTitle,
+        weekDays,
+      });
+
+      Alert.alert("Novo hábito", "Novo hábito cadastrado com sucesso.");
+      setTitle("");
+      setWeekDays([]);
+    } catch {
+      Alert.alert("Novo hábito", "Ocorreu um erro ao cadastrar o novo hábito.");
+    } finally {
+      setIsSubmitting(false);
+    }
+  }
 
   function handleToggleWeekDay(weekDayIndex: number) {
     return () => {
@@ -52,6 +90,8 @@ export const New: React.FC<NewProps> = () => {
         </Text>
 
         <TextInput
+          value={title}
+          onChangeText={setTitle}
           placeholderTextColor={colors.zinc[400]}
           placeholder="Ex.: Exercícios, dormir bem, etc..."
           className="h-12 pl-4 rounded-lg mt-3 bg-zinc-900 text-white border-2 focus:border-green-600 border-zinc-800"
@@ -72,9 +112,18 @@ export const New: React.FC<NewProps> = () => {
 
         <TouchableOpacity
           activeOpacity={0.7}
-          className="flex-row bg-green-600 w-full h-14 items-center justify-center rounded-md mt-6"
+          disabled={isSubmitting}
+          onPress={handleCreateNewHabit}
+          className={classNames(
+            "flex-row w-full h-14 items-center justify-center rounded-md mt-6",
+            isSubmitting ? "bg-zinc-600" : "bg-green-600",
+          )}
         >
-          <Feather name="check" size={20} color={colors.white} />
+          {isSubmitting ? (
+            <ActivityIndicator color={colors.white} size={20} />
+          ) : (
+            <Feather name="check" size={20} color={colors.white} />
+          )}
 
           <Text className="font-semibold text-base text-white ml-3">
             Confirmar

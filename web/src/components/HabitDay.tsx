@@ -1,14 +1,26 @@
 import * as Popover from "@radix-ui/react-popover";
 import classNames from "classnames";
+import dayjs from "dayjs";
+import { Checkbox } from "./Checkbox";
 import { ProgressBar } from "./ProgressBar";
 
 interface HabitDayProps {
-  amount: number;
-  completed: number;
+  amount?: number;
+  completed?: number;
+  date: Date;
 }
 
-export const HabitDay: React.FC<HabitDayProps> = ({ amount, completed }) => {
-  const completedPercentage = Math.round((completed / amount) * 100);
+export const HabitDay: React.FC<HabitDayProps> = ({
+  amount = 0,
+  completed = 0,
+  date,
+}) => {
+  const completedPercentage =
+    amount > 0 ? Math.round((completed / amount) * 100) : 0;
+
+  const parsedDate = dayjs(date);
+  const dayOfTheWeek = parsedDate.format("dddd");
+  const dayAndMonth = parsedDate.format("DD/MM");
 
   return (
     <Popover.Root>
@@ -28,18 +40,26 @@ export const HabitDay: React.FC<HabitDayProps> = ({ amount, completed }) => {
       />
 
       <Popover.Portal>
-        <Popover.Content className="min-w-[20rem] rounded-2xl p-6 bg-zinc-900 flex flex-col">
+        <Popover.Content className="min-w-[20rem] rounded-2xl p-6 bg-zinc-900 flex flex-col shadow-lg shadow-violet-800/5">
           <Popover.Arrow className="fill-zinc-900 h-2 w-4" />
-          <span className="font-semibold text-zinc-400">Terça-feira</span>
+          <span className="font-semibold text-zinc-400">{dayOfTheWeek}</span>
 
           <span className="mt-1 font-extrabold leading-tight text-3xl">
-            17/01
+            {dayAndMonth}
           </span>
 
           <ProgressBar
             progress={completedPercentage}
             label="Progresso de hábitos completados neste dia"
           />
+
+          <div className="mt-6 flex flex-col gap-3">
+            <Checkbox>
+              <span className="font-semibold text-xl leading-tight group-data-[state=checked]:line-through group-data-[state=checked]:text-zinc-400 transition-all">
+                Beber 2L de água
+              </span>
+            </Checkbox>
+          </div>
         </Popover.Content>
       </Popover.Portal>
     </Popover.Root>
