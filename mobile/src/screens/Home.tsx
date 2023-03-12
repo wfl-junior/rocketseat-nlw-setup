@@ -1,3 +1,4 @@
+import { useNavigation } from "@react-navigation/native";
 import { ScrollView, Text, View } from "react-native";
 import { daySize, HabitDay } from "~/components/HabitDay";
 import { Header } from "~/components/Header";
@@ -15,36 +16,49 @@ const amountOfDaysToFill = Array.from(
 
 interface HomeProps {}
 
-export const Home: React.FC<HomeProps> = () => (
-  <View className="bg-background flex-1 px-8 pt-16">
-    <Header />
+export const Home: React.FC<HomeProps> = () => {
+  const { navigate } = useNavigation();
 
-    <View className="flex-row mt-6 mb-2">
-      {weekDays.map((weekDay, index) => (
-        <Text
-          key={index}
-          style={{ width: daySize }}
-          className="text-zinc-400 text-xl font-bold text-center mx-1"
-        >
-          {weekDay}
-        </Text>
-      ))}
-    </View>
+  function handleNavigateToHabit(date: string) {
+    return () => {
+      navigate("habit", { date });
+    };
+  }
 
-    <ScrollView>
-      <View className="flex-row flex-wrap pb-8">
-        {summaryDates.map(date => (
-          <HabitDay key={date.toISOString()} />
-        ))}
+  return (
+    <View className="bg-background flex-1 px-8 pt-16">
+      <Header />
 
-        {amountOfDaysToFill.map(number => (
-          <View
-            key={number}
-            style={{ width: daySize, height: daySize }}
-            className="bg-zinc-900 border-2 border-zinc-800 rounded-lg m-1 opacity-40"
-          />
+      <View className="flex-row mt-6 mb-2">
+        {weekDays.map((weekDay, index) => (
+          <Text
+            key={index}
+            style={{ width: daySize }}
+            className="text-zinc-400 text-xl font-bold text-center mx-1"
+          >
+            {weekDay}
+          </Text>
         ))}
       </View>
-    </ScrollView>
-  </View>
-);
+
+      <ScrollView contentContainerStyle={{ paddingBottom: 32 }}>
+        <View className="flex-row flex-wrap">
+          {summaryDates.map(date => (
+            <HabitDay
+              key={date.toISOString()}
+              onPress={handleNavigateToHabit(date.toISOString())}
+            />
+          ))}
+
+          {amountOfDaysToFill.map(number => (
+            <View
+              key={number}
+              style={{ width: daySize, height: daySize }}
+              className="bg-zinc-900 border-2 border-zinc-800 rounded-lg m-1 opacity-40"
+            />
+          ))}
+        </View>
+      </ScrollView>
+    </View>
+  );
+};

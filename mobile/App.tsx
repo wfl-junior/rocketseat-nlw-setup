@@ -9,7 +9,7 @@ import { Fragment } from "react";
 import { StatusBar } from "react-native";
 import { Loading } from "~/components/Loading";
 import "~/lib/dayjs";
-import { Home } from "~/screens/Home";
+import { Routes } from "~/routes";
 
 const App: React.FC = () => {
   const [areFontsReady] = useFonts({
@@ -27,7 +27,7 @@ const App: React.FC = () => {
         backgroundColor="transparent"
       />
 
-      {areFontsReady ? <Home /> : <Loading />}
+      {areFontsReady ? <Routes /> : <Loading />}
     </Fragment>
   );
 };
