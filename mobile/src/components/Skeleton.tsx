@@ -29,16 +29,17 @@ export const Skeleton: React.FC<SkeletonProps> = ({
     );
   }, []);
 
-  const rStyle = useAnimatedStyle(() => ({
-    opacity: opacity.value,
-  }));
+  const animatedStyle = useAnimatedStyle(
+    () => ({ opacity: opacity.value }),
+    [opacity],
+  );
 
   return (
     <Animated.View
       {...props}
       role="alert"
       aria-live="polite"
-      style={[style, rStyle]}
+      style={[style, animatedStyle]}
       className={classNames(
         "bg-zinc-900 border-zinc-800 overflow-hidden border-2",
         className,

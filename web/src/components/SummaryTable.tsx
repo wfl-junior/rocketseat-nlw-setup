@@ -14,7 +14,7 @@ const amountOfDaysToFill = Array.from(
   (_, index) => index + 1,
 );
 
-interface SummaryItem {
+export interface SummaryItem {
   id: string;
   date: string;
   amount: number;
@@ -26,9 +26,9 @@ interface SummaryTableProps {}
 export const SummaryTable: React.FC<SummaryTableProps> = () => {
   const { data: summary } = useQuery(
     ["summary"],
-    async () => {
+    async ({ signal }) => {
       const [response] = await Promise.all([
-        api.get<{ summary: SummaryItem[] }>("/summary"),
+        api.get<{ summary: SummaryItem[] }>("/summary", { signal }),
         sleep(1000),
       ]);
 

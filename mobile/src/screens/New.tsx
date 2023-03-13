@@ -6,13 +6,13 @@ import {
   Alert,
   ScrollView,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
 import colors from "tailwindcss/colors";
 import { BackButton } from "~/components/BackButton";
 import { Checkbox } from "~/components/Checkbox";
+import { Input } from "~/components/Input";
 import { api } from "~/lib/axios";
 
 const availableWeekDays = [
@@ -89,26 +89,26 @@ export const New: React.FC<NewProps> = () => {
           Qual seu comprometimento?
         </Text>
 
-        <TextInput
+        <Input
           value={title}
           onChangeText={setTitle}
-          placeholderTextColor={colors.zinc[400]}
           placeholder="Ex.: Exercícios, dormir bem, etc..."
-          className="h-12 pl-4 rounded-lg mt-3 bg-zinc-900 text-white border-2 focus:border-green-600 border-zinc-800"
         />
 
         <Text className="font-semibold mt-4 mb-3 text-white text-base">
           Qual a recorrência?
         </Text>
 
-        {availableWeekDays.map((weekDay, index) => (
-          <Checkbox
-            key={weekDay}
-            title={weekDay}
-            isChecked={weekDays.includes(index)}
-            onPress={handleToggleWeekDay(index)}
-          />
-        ))}
+        <View className="gap-2">
+          {availableWeekDays.map((weekDay, index) => (
+            <Checkbox
+              key={weekDay}
+              title={weekDay}
+              isChecked={weekDays.includes(index)}
+              onPress={handleToggleWeekDay(index)}
+            />
+          ))}
+        </View>
 
         <TouchableOpacity
           activeOpacity={0.7}

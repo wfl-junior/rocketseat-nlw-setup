@@ -42,7 +42,7 @@ export const Home: React.FC<HomeProps> = () => {
                   <TouchableOpacity
                     activeOpacity={0.7}
                     onPress={() => resetErrorBoundary()}
-                    className="border border-violet-500 rounded-lg px-6 py-4 flex items-center justify-center mt-4"
+                    className="border border-violet-500 active:border-violet-600 rounded-lg px-6 py-4 flex items-center justify-center mt-4"
                   >
                     <Text className="text-white text-base font-semibold">
                       Tentar novamente

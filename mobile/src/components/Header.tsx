@@ -20,7 +20,7 @@ export const Header: React.FC<HeaderProps> = () => {
       <TouchableOpacity
         activeOpacity={0.7}
         onPress={handleNavigateToNew}
-        className="flex-row h-11 px-4 border border-violet-500 rounded-lg items-center"
+        className="flex-row h-11 px-4 border border-violet-500 rounded-lg items-center active:border-violet-600"
       >
         <Feather name="plus" color={colors.violet[500]} size={20} />
         <Text className="text-white ml-3 font-semibold text-base">Novo</Text>

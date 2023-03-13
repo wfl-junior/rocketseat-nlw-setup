@@ -5,6 +5,7 @@ import {
   TouchableOpacity,
   TouchableOpacityProps,
 } from "react-native";
+import { getProgressPercentage } from "~/utils/get-progress-percentage";
 
 const weekDays = 7;
 const screenHorizontalPadding = (32 * 2) / 5;
@@ -26,8 +27,7 @@ export const HabitDay: React.FC<HabitDayProps> = ({
   ...props
 }) => {
   const isToday = dayjs().isSame(date, "day");
-  const completedPercentage =
-    amount > 0 ? Math.round((completed / amount) * 100) : 0;
+  const completedPercentage = getProgressPercentage(amount, completed);
 
   return (
     <TouchableOpacity
@@ -43,8 +43,9 @@ export const HabitDay: React.FC<HabitDayProps> = ({
           completedPercentage >= 20 && completedPercentage < 40,
         "bg-violet-900 border-violet-800":
           completedPercentage > 0 && completedPercentage < 20,
-        "bg-zinc-900 border-zinc-800": completedPercentage === 0,
-        "border-violet-600": isToday,
+        "bg-zinc-900": completedPercentage === 0,
+        "border-zinc-800": completedPercentage === 0 && !isToday,
+        "border-violet-600": completedPercentage === 0 && isToday,
       })}
       {...props}
     />

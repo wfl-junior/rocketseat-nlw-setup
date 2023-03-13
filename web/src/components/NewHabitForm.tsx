@@ -79,7 +79,7 @@ export const NewHabitForm: React.FC<NewHabitFormProps> = () => {
         value={title}
         onChange={event => setTitle(event.target.value)}
         placeholder="Ex.: Exercícios, dormir bem, etc..."
-        className="p-4 rounded-lg mt-3 bg-zinc-800 text-white placeholder:text-zinc-400 border-2 focus:outline-none focus:border-green-600 border-zinc-800"
+        className="p-4 rounded-lg mt-3 bg-zinc-800 text-white placeholder:text-zinc-400 border-2 focus-visible:outline-none focus:border-violet-500 border-zinc-800"
       />
 
       <label htmlFor="" className="font-semibold leading-tight mt-4">
@@ -101,7 +101,7 @@ export const NewHabitForm: React.FC<NewHabitFormProps> = () => {
       <button
         type="submit"
         disabled={isSubmitting}
-        className="mt-6 rounded-lg p-4 gap-3 flex items-center font-semibold bg-green-600 hover:enabled:bg-green-700 transition-colors justify-center disabled:bg-zinc-600 disabled:cursor-not-allowed"
+        className="mt-6 rounded-lg p-4 gap-3 flex items-center font-semibold bg-green-600 hover:enabled:bg-green-700 transition-colors justify-center disabled:bg-zinc-600 disabled:cursor-not-allowed focus-visible:ring-offset-zinc-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-4 focus-visible:ring-green-600"
       >
         {isSubmitting ? (
           <CircleNotch size={20} weight="bold" className="animate-spin" />

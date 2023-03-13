@@ -2,7 +2,6 @@ import { useNavigation } from "@react-navigation/native";
 import dayjs from "dayjs";
 import { View } from "react-native";
 import { useQuery } from "react-query";
-import { useRefetchOnFocus } from "~/hooks/useRefetchOnFocus";
 import { api } from "~/lib/axios";
 import { generateDatesFromYearBeginning } from "~/utils/generate-dates-from-year-beginning";
 import { sleep } from "~/utils/sleep";
@@ -16,7 +15,7 @@ const amountOfDaysToFill = Array.from(
   (_, index) => index + 1,
 );
 
-interface SummaryItem {
+export interface SummaryItem {
   id: string;
   date: string;
   amount: number;
@@ -27,11 +26,11 @@ interface SummaryTableProps {}
 
 export const SummaryTable: React.FC<SummaryTableProps> = () => {
   const { navigate } = useNavigation();
-  const { data: summary, refetch } = useQuery(
+  const { data: summary } = useQuery(
     ["summary"],
-    async () => {
+    async ({ signal }) => {
       const [response] = await Promise.all([
-        api.get<{ summary: SummaryItem[] }>("/summary"),
+        api.get<{ summary: SummaryItem[] }>("/summary", { signal }),
         sleep(1000),
       ]);
 
@@ -39,8 +38,6 @@ export const SummaryTable: React.FC<SummaryTableProps> = () => {
     },
     { suspense: true },
   );
-
-  useRefetchOnFocus(refetch);
 
   function handleNavigateToHabit(date: string) {
     return () => {
