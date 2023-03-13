@@ -1,18 +1,11 @@
-import dayjs from "dayjs";
-import { useQuery } from "react-query";
-import { api } from "~/lib/axios";
-import { generateDatesFromYearBeginning } from "~/utils/generate-dates-from-year-beginning";
-import { sleep } from "~/utils/sleep";
-import { HabitDay } from "./HabitDay";
+import { Suspense } from "react";
+import { ErrorBoundary } from "react-error-boundary";
+import { QueryErrorResetBoundary } from "react-query";
+import { Button } from "./Button";
+import { SummaryTableHabits } from "./SummaryTableHabits";
+import { SummaryTableHabitsSkeleton } from "./SummaryTableHabitsSkeleton";
 
 const weekDays = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"];
-const summaryDates = generateDatesFromYearBeginning();
-const minimumSummaryDatesSize = 18 * 7; // 18 weeks
-
-const amountOfDaysToFill = Array.from(
-  { length: minimumSummaryDatesSize - summaryDates.length },
-  (_, index) => index + 1,
-);
 
 export interface SummaryItem {
   id: string;
@@ -23,56 +16,45 @@ export interface SummaryItem {
 
 interface SummaryTableProps {}
 
-export const SummaryTable: React.FC<SummaryTableProps> = () => {
-  const { data: summary } = useQuery(
-    ["summary"],
-    async ({ signal }) => {
-      const [response] = await Promise.all([
-        api.get<{ summary: SummaryItem[] }>("/summary", { signal }),
-        sleep(1000),
-      ]);
-
-      return response.data.summary;
-    },
-    { suspense: true },
-  );
-
-  return (
-    <div className="w-full flex gap-3">
-      <div className="grid grid-rows-7 grid-flow-row gap-3">
-        {weekDays.map(weekDay => (
-          <div
-            key={weekDay}
-            className="text-zinc-400 text-xl w-10 aspect-square flex items-center justify-center font-bold"
-          >
-            {weekDay}
-          </div>
-        ))}
-      </div>
-
-      <div className="grid grid-rows-7 grid-flow-col gap-3">
-        {summaryDates.map(date => {
-          const dayInSummary = summary?.find(day => {
-            return dayjs(date).isSame(day.date, "day");
-          });
-
-          return (
-            <HabitDay
-              key={date.toISOString()}
-              date={date}
-              amount={dayInSummary?.amount}
-              completed={dayInSummary?.completed}
-            />
-          );
-        })}
-
-        {amountOfDaysToFill.map(number => (
-          <div
-            key={number}
-            className="aspect-square w-10 bg-zinc-900 border-2 border-zinc-800 rounded-lg cursor-not-allowed opacity-40"
-          />
-        ))}
-      </div>
+export const SummaryTable: React.FC<SummaryTableProps> = () => (
+  <div className="w-full flex gap-3">
+    <div className="grid grid-rows-7 grid-flow-row gap-3">
+      {weekDays.map(weekDay => (
+        <div
+          key={weekDay}
+          className="text-zinc-400 text-lg sm:text-xl w-9 sm:w-10 aspect-square flex items-center justify-center font-bold"
+        >
+          {weekDay}
+        </div>
+      ))}
     </div>
-  );
-};
+
+    <div className="grid grid-rows-7 grid-flow-col gap-3 overflow-x-auto scrollbar-thin scrollbar-thumb-violet-500 pb-3 scrollbar-thumb-rounded-md">
+      <QueryErrorResetBoundary>
+        {({ reset }) => (
+          <ErrorBoundary
+            onReset={reset}
+            fallbackRender={({ resetErrorBoundary }) => (
+              <div className="flex flex-col gap-4 items-center">
+                <span className="text-red-500 sm:text-lg font-medium">
+                  Ocorreu um erro inesperado 😰
+                </span>
+
+                <Button
+                  onClick={() => resetErrorBoundary()}
+                  className="focus-visible:ring-offset-background"
+                >
+                  Tentar novamente
+                </Button>
+              </div>
+            )}
+          >
+            <Suspense fallback={<SummaryTableHabitsSkeleton />}>
+              <SummaryTableHabits />
+            </Suspense>
+          </ErrorBoundary>
+        )}
+      </QueryErrorResetBoundary>
+    </div>
+  </div>
+);

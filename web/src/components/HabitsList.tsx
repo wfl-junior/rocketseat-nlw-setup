@@ -159,7 +159,7 @@ export const HabitsList: React.FC<HabitsListProps> = ({ date }) => {
               onCheckedChange={handleToggleHabit(habit.id)}
               checked={habitsInfo.completedHabits.includes(habit.id)}
             >
-              <span className="font-semibold text-xl leading-tight group-data-[state=checked]:line-through group-data-[state=checked]:text-zinc-400 transition-all group-disabled:cursor-not-allowed group-disabled:text-zinc-500 group-hover:enabled:text-zinc-400">
+              <span className="font-semibold text-lg sm:text-xl leading-tight group-data-[state=checked]:line-through group-data-[state=checked]:text-zinc-400 transition-all group-disabled:cursor-not-allowed group-disabled:text-zinc-500 group-hover:enabled:text-zinc-400">
                 {habit.title}
               </span>
             </Checkbox>

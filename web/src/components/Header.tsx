@@ -12,12 +12,12 @@ export const Header: React.FC<HeaderProps> = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   return (
-    <header className="w-full max-w-3xl mx-auto flex items-center justify-between">
+    <header className="w-full max-w-3xl mx-auto flex items-center justify-between flex-col xs:flex-row gap-6">
       <Logo />
 
       <Dialog.Root open={isModalOpen} onOpenChange={setIsModalOpen}>
         <Dialog.Trigger asChild>
-          <Button className="group focus-visible:ring-offset-background">
+          <Button className="group w-full xs:w-max focus-visible:ring-offset-background">
             <Plus
               size={20}
               className="text-violet-500 group-hover:text-violet-300 transition-colors"
@@ -59,7 +59,7 @@ export const Header: React.FC<HeaderProps> = () => {
                       <X size={24} />
                     </Dialog.Close>
 
-                    <Dialog.Title className="text-3xl leading-tight font-extrabold">
+                    <Dialog.Title className="text-2xl sm:text-2xl leading-tight font-extrabold">
                       Criar hábito
                     </Dialog.Title>
 

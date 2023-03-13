@@ -36,7 +36,7 @@ export const HabitDay: React.FC<HabitDayProps> = ({
     <Popover.Root onOpenChange={setIsPopoverOpen}>
       <Popover.Trigger
         className={classNames(
-          "aspect-square w-10 border-2 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:ring-violet-500",
+          "aspect-square w-9 sm:w-10 border-2 rounded-lg transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:ring-violet-500",
           {
             "bg-violet-500 border-violet-400": completedPercentage >= 80,
             "bg-violet-600 border-violet-500":
@@ -59,18 +59,19 @@ export const HabitDay: React.FC<HabitDayProps> = ({
           <Popover.Portal forceMount>
             <Popover.Content forceMount asChild>
               <motion.div
-                className="min-w-[20rem] rounded-2xl p-6 bg-zinc-900 flex flex-col shadow-lg shadow-violet-800/5"
+                className="min-w-[20rem] max-w-[100vw] rounded-2xl p-6 bg-zinc-900 flex flex-col shadow-lg shadow-violet-800/5"
                 initial={{ opacity: 0, y: 25 }}
                 animate={{ opacity: 1, y: 0, transition: { duration: 0.3 } }}
                 exit={{ opacity: 0, y: 10, transition: { duration: 0.2 } }}
                 transition={{ ease: "easeInOut" }}
               >
                 <Popover.Arrow className="fill-zinc-900 h-2 w-4" />
-                <span className="font-semibold text-zinc-400">
+
+                <span className="font-semibold text-zinc-400 text-sm sm:text-base">
                   {dayOfTheWeek}
                 </span>
 
-                <span className="mt-1 font-extrabold leading-tight text-3xl">
+                <span className="mt-1 font-extrabold leading-tight text-2xl sm:text-3xl">
                   {dayAndMonth}
                 </span>
 

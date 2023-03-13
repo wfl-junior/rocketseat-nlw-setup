@@ -81,7 +81,7 @@ async function main() {
         data: {
           date: new Date("2023-01-02T03:00:00.000Z"),
           dayHabits: {
-            create: [{ habitId: firstHabitId }, { habitId: secondHabitId }],
+            create: [{ habitId: firstHabitId }, { habitId: thirdHabitId }],
           },
         },
       }),

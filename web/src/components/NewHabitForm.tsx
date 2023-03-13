@@ -67,7 +67,10 @@ export const NewHabitForm: React.FC<NewHabitFormProps> = () => {
 
   return (
     <form onSubmit={handleCreateNewHabit} className="w-full flex flex-col">
-      <label htmlFor="title" className="font-semibold leading-tight">
+      <label
+        htmlFor="title"
+        className="font-semibold leading-tight text-sm sm:text-base"
+      >
         Qual seu comprometimento?
       </label>
 
@@ -79,10 +82,13 @@ export const NewHabitForm: React.FC<NewHabitFormProps> = () => {
         value={title}
         onChange={event => setTitle(event.target.value)}
         placeholder="Ex.: Exercícios, dormir bem, etc..."
-        className="p-4 rounded-lg mt-3 bg-zinc-800 text-white placeholder:text-zinc-400 border-2 focus-visible:outline-none focus:border-violet-500 border-zinc-800"
+        className="p-3 sm:p-4 rounded-lg mt-3 bg-zinc-800 text-white placeholder:text-zinc-400 border-2 focus-visible:outline-none focus:border-violet-500 border-zinc-800 text-sm sm:text-base"
       />
 
-      <label htmlFor="" className="font-semibold leading-tight mt-4">
+      <label
+        htmlFor=""
+        className="font-semibold leading-tight mt-4 text-sm sm:text-base"
+      >
         Qual a recorrência?
       </label>
 
@@ -93,7 +99,9 @@ export const NewHabitForm: React.FC<NewHabitFormProps> = () => {
             checked={weekDays.includes(index)}
             onCheckedChange={handleToggleWeekDay(index)}
           >
-            <span className="leading-tight">{weekDay}</span>
+            <span className="leading-tight text-sm sm:text-base">
+              {weekDay}
+            </span>
           </Checkbox>
         ))}
       </div>
