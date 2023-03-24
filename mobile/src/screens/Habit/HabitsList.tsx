@@ -1,8 +1,9 @@
 import { CanceledError } from "axios";
 import dayjs from "dayjs";
 import { useRef } from "react";
-import { Alert, Text, View } from "react-native";
+import { ActivityIndicator, Alert, Text, View } from "react-native";
 import { useQuery, useQueryClient } from "react-query";
+import colors from "tailwindcss/colors";
 import { Checkbox } from "~/components/Checkbox";
 import { SummaryItem } from "~/components/SummaryTable";
 import { api } from "~/lib/axios";
@@ -31,7 +32,7 @@ export const HabitsList: React.FC<HabitsListProps> = ({ date }) => {
 
   const dateString = dayjs(date).startOf("day").toISOString();
   const queryKey = ["days", dateString];
-  const { data: habitsInfo } = useQuery<HabitsInfo>(
+  const { data: habitsInfo, isFetching } = useQuery<HabitsInfo>(
     queryKey,
     async ({ signal }) => {
       const [{ data }] = await Promise.all([
@@ -154,6 +155,16 @@ export const HabitsList: React.FC<HabitsListProps> = ({ date }) => {
           isChecked={habitsInfo.completedHabits.includes(habit.id)}
         />
       ))}
+
+      {isFetching && (
+        <View className="flex-row items-center gap-2 mt-2">
+          <ActivityIndicator size={20} color={colors.violet[400]} />
+
+          <Text className="font-medium text-sm text-violet-400">
+            Revalidando...
+          </Text>
+        </View>
+      )}
     </View>
   );
 };

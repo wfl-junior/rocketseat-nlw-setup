@@ -27,13 +27,19 @@ export const Habit: React.FC<HabitProps> = () => {
   const dayOfTheWeek = parsedDate.format("dddd");
   const dayAndMonth = parsedDate.format("DD/MM");
 
-  const { data: summary } = useQuery(["summary"], async ({ signal }) => {
-    const { data } = await api.get<{ summary: SummaryItem[] }>("/summary", {
-      signal,
-    });
+  const { data: summary } = useQuery(
+    ["summary"],
+    async ({ signal }) => {
+      const { data } = await api.get<{ summary: SummaryItem[] }>("/summary", {
+        signal,
+      });
 
-    return data.summary;
-  });
+      return data.summary;
+    },
+    {
+      refetchOnMount: false,
+    },
+  );
 
   const dayInSummary = summary?.find(day => {
     return parsedDate.isSame(day.date, "day");

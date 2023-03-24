@@ -1,6 +1,7 @@
 import { CanceledError } from "axios";
 import dayjs from "dayjs";
 import { AnimatePresence, motion } from "framer-motion";
+import { CircleNotch } from "phosphor-react";
 import { useRef } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import { toast } from "react-toastify";
@@ -32,7 +33,7 @@ export const HabitsList: React.FC<HabitsListProps> = ({ date }) => {
 
   const dateString = dayjs(date).startOf("day").toISOString();
   const queryKey = ["days", dateString];
-  const { data: habitsInfo } = useQuery<HabitsInfo>(
+  const { data: habitsInfo, isFetching } = useQuery<HabitsInfo>(
     queryKey,
     async ({ signal }) => {
       const [{ data }] = await Promise.all([
@@ -166,6 +167,13 @@ export const HabitsList: React.FC<HabitsListProps> = ({ date }) => {
           </motion.div>
         ))}
       </AnimatePresence>
+
+      {isFetching && (
+        <div className="flex items-center gap-2 text-violet-400 mt-2">
+          <CircleNotch size={20} className="animate-spin" />
+          <span className="font-medium text-sm">Revalidando...</span>
+        </div>
+      )}
     </div>
   );
 };
